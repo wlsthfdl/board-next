@@ -1,4 +1,22 @@
+"use client";
+
+import BoardItem from "./board-item";
+import { BoardData } from "@/types";
+import { useState, useEffect } from "react";
+import { getBoards } from "@/lib/board";
+
 export default function BoardList() {
+  const [boards, setBoards] = useState<BoardData[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const data = await getBoards();
+      setBoards(data);
+    }
+
+    load();
+  }, []);
+
   return (
     <div className="border-t border-gray-200">
       {/* header */}
@@ -9,6 +27,15 @@ export default function BoardList() {
       </div>
 
       {/* list */}
+      {boards.map((board, index) => {
+        return (
+          <BoardItem
+            key={board.id}
+            board={board}
+            total={boards.length - index}
+          ></BoardItem>
+        );
+      })}
     </div>
   );
 }

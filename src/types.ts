@@ -1,5 +1,5 @@
 export interface BoardData {
-  id: string;
+  id: number;
   title: string;
   nickname: string;
   userId: string;

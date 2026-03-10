@@ -2,22 +2,24 @@ import type { BoardData } from "@/types";
 import Link from "next/link";
 
 export default function BoardItem({
-  id,
-  title,
-  nickname,
-  userId,
-  date,
-  content,
-}: BoardData) {
+  board,
+  total,
+}: {
+  board: BoardData;
+  total: number;
+}) {
   return (
-    <Link href={`/board/${id}`}>
-      <div className="grid min-h-[480px] grid-cols-12 border-b px-4 py-3 text-sm">
-        <div className="col-span-1 text-center text-gray-500">{id}</div>
+    <Link
+      href={`/board/${board.id}`}
+      className="grid grid-cols-12 border-b px-4 py-3 text-sm"
+    >
+      <div className="col-span-1 text-center text-gray-500">{total}</div>
 
-        <div className="col-span-8 cursor-pointer hover:underline">{title}</div>
-
-        <div className="col-span-3 text-center text-gray-500">{date}</div>
+      <div className="col-span-8 cursor-pointer hover:underline">
+        {board.title}
       </div>
+
+      <div className="col-span-3 text-center text-gray-500">{board.date}</div>
     </Link>
   );
 }
