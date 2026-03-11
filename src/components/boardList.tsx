@@ -4,18 +4,29 @@ import BoardItem from "./board-item";
 import { BoardData } from "@/types";
 import { useState, useEffect } from "react";
 import { getBoards } from "@/lib/board";
+import { useSearchParams } from "next/navigation";
 
 export default function BoardList() {
+  const searchParam = useSearchParams();
+  const q = searchParam.get("q") ?? "";
+
   const [boards, setBoards] = useState<BoardData[]>([]);
 
+  console.log(boards);
   useEffect(() => {
     async function load() {
       const data = await getBoards();
-      setBoards(data);
+
+      //검색어 포함 항목
+      const filtered = data.filter((board) => board.title.includes(q));
+
+      const sorted = filtered.sort((a, b) => Number(b.id) - Number(a.id));
+
+      setBoards(sorted);
     }
 
     load();
-  }, []);
+  }, [q]);
 
   return (
     <div className="border-t border-gray-200">

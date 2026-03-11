@@ -1,9 +1,10 @@
 "use client";
 
-import { getBoard, addBoards, editBoards } from "@/lib/board";
+import { getBoard, addBoard, editBoard, deleteBoard } from "@/lib/board";
 import { BoardData } from "@/types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { validation } from "@/app/utils/validation";
 
 export default function BoardForm({
   id,
@@ -65,17 +66,27 @@ export default function BoardForm({
   }
 
   function handleSubmit() {
+    if (!validation(form)) return;
     const msg = `게시글을 ${mode === "write" ? "등록" : "수정"} 하시겠습니까?`;
 
     if (!confirm(msg)) return;
 
     if (mode === "write") {
-      addBoards(form);
-      alert("게시글이 등록 되었습니다.");
+      addBoard(form);
+      alert("게시글이 등록되었습니다.");
     } else if (mode === "edit" && id) {
-      editBoards(form, Number(id));
-      alert("게시글이 수정 되었습니다.");
+      editBoard(form, Number(id));
+      alert("게시글이 수정되었습니다.");
     }
+  }
+
+  function handleDelete() {
+    const msg = "게시글을 삭제 하시겠습니까?";
+    if (!confirm(msg)) return;
+
+    deleteBoard(Number(id));
+    alert("게시글이 삭제되었습니다.");
+    router.push("/board");
   }
 
   return (
@@ -90,13 +101,20 @@ export default function BoardForm({
           className="rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
           placeholder="게시글 제목을 입력하세요"
           onChange={handleChange}
+          maxLength={200}
         />
       </div>
 
       {/* 닉네임 */}
       <div className="mb-4 flex gap-4">
-        <div className="flex flex-1 flex-col">
-          <label className="mb-1 font-medium">작성자 닉네임</label>
+        <div className="flex flex-1 flex-col gap-1">
+          <div className="flex items-center gap-4">
+            <label className="font-medium">닉네임</label>
+            <span className="text-xs text-gray-500">
+              ※ 영문, 숫자, _(underscore)만 사용 가능
+            </span>
+          </div>
+
           <input
             value={form.nickname}
             name="nickname"
@@ -104,19 +122,27 @@ export default function BoardForm({
             className="rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
             placeholder="닉네임 입력"
             onChange={handleChange}
+            maxLength={25}
           />
         </div>
 
         {/* 유저ID */}
-        <div className="flex flex-1 flex-col">
-          <label className="mb-1 font-medium">ID</label>
+        <div className="flex flex-1 flex-col gap-1">
+          <div className="flex items-center gap-4">
+            <label className="font-medium">ID</label>
+            <span className="text-xs text-gray-500">
+              ※ E-mail 형식으로 입력해주세요
+            </span>
+          </div>
+
           <input
             value={form.userId}
             name="userId"
-            type="text"
+            type="email"
             className="rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
             placeholder="자동 생성 또는 입력 가능"
             onChange={handleChange}
+            maxLength={100}
           />
         </div>
       </div>
@@ -130,6 +156,7 @@ export default function BoardForm({
           type="date"
           className="rounded border border-gray-300 bg-gray-100 px-3 py-2"
           onChange={handleChange}
+          maxLength={10}
         />
       </div>
 
@@ -142,17 +169,20 @@ export default function BoardForm({
           className="h-60 resize-none rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300"
           placeholder="게시글 내용을 입력하세요"
           onChange={handleChange}
+          maxLength={5000}
         />
       </div>
 
       {/* 버튼 */}
       <div className="flex justify-end gap-2">
-        <button
-          className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
-          onClick={() => router.push("/board")}
-        >
-          뒤로가기
-        </button>
+        {mode === "edit" && (
+          <button
+            className="rounded border border-gray-300 px-4 py-2 hover:bg-gray-100"
+            onClick={handleDelete}
+          >
+            삭제
+          </button>
+        )}
         <button
           className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-500"
           onClick={handleSubmit}

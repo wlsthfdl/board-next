@@ -1,6 +1,5 @@
 import { BoardData } from "@/types";
 import mockData from "./../mock/board.json";
-import { json } from "stream/consumers";
 
 //목록
 export async function getBoards(): Promise<BoardData[]> {
@@ -25,13 +24,13 @@ export async function getBoard(id: string): Promise<BoardData | undefined> {
   return boards.find((item) => Number(item.id) === Number(id));
 }
 
-export async function addBoards(data: BoardData): Promise<BoardData[]> {
+//등록
+export async function addBoard(data: BoardData): Promise<BoardData[]> {
   const boards = await getBoards();
 
   const newBoards = {
     ...data,
     id: Date.now(),
-    date: new Date().toISOString(),
   };
   const updateBoards = [...boards, newBoards];
 
@@ -40,13 +39,22 @@ export async function addBoards(data: BoardData): Promise<BoardData[]> {
   return updateBoards;
 }
 
-export async function editBoards(data: BoardData, id: number) {
+//수정
+export async function editBoard(data: BoardData, id: number) {
   const boards = await getBoards();
 
   /// {...prev, ...data} spread: 뒤에있는 값이 앞에있는 값을 덮어쓴다.
   const updateBoards = boards.map((prev) =>
-    prev.id === id ? { ...prev, ...data } : prev,
+    Number(prev.id) === Number(id) ? { ...prev, ...data } : prev,
   );
 
   localStorage.setItem("board", JSON.stringify(updateBoards));
+}
+
+//삭제
+export async function deleteBoard(id: number) {
+  const boards = await getBoards();
+  const delBoard = boards.filter((item) => Number(item.id) !== Number(id));
+
+  localStorage.setItem("board", JSON.stringify(delBoard));
 }
