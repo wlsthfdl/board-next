@@ -5,6 +5,7 @@ import { BoardData } from "@/types";
 import { useState, useEffect } from "react";
 import { getBoards } from "@/lib/board";
 import { useSearchParams } from "next/navigation";
+import { useBoardStore } from "@/store/boardStore";
 
 export default function BoardList() {
   const searchParam = useSearchParams();
@@ -12,21 +13,32 @@ export default function BoardList() {
 
   const [boards, setBoards] = useState<BoardData[]>([]);
 
-  console.log(boards);
+  //총 게시물 개수 set
+  const setTotalCount = useBoardStore((state) => state.setTotalCount);
+  const totalCount = useBoardStore((state) => state.totalCount);
+  const currentPage = useBoardStore((state) => state.currentPage);
+
+  const pageSize = 2;
   useEffect(() => {
     async function load() {
       const data = await getBoards();
 
       //검색어 포함 항목
       const filtered = data.filter((board) => board.title.includes(q));
-
+      //내림차순 정렬
       const sorted = filtered.sort((a, b) => Number(b.id) - Number(a.id));
+      //총 게시글 개수
+      setTotalCount(filtered.length);
 
-      setBoards(sorted);
+      //pagination
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+
+      setBoards(sorted.slice(start, end));
     }
 
     load();
-  }, [q]);
+  }, [q, currentPage]);
 
   return (
     <div className="border-t border-gray-200">
@@ -43,7 +55,7 @@ export default function BoardList() {
           <BoardItem
             key={board.id}
             board={board}
-            total={boards.length - index}
+            total={totalCount - (currentPage - 1) - index}
           ></BoardItem>
         );
       })}
