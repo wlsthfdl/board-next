@@ -5,7 +5,8 @@
     "nickname": "닉네임1",
     "userId": "유저1",
     "date": "2025-01-01",
-    "content": "내용1"
+    "content": "내용1",
+    "views": 1
   },
   {
     "id": 2,
@@ -13,7 +14,8 @@
     "nickname": "닉네임2",
     "userId": "유저2",
     "date": "2025-01-02",
-    "content": "내용2"
+    "content": "내용2",
+    "views": 2
   },
   {
     "id": 3,
@@ -21,6 +23,7 @@
     "nickname": "닉네임3",
     "userId": "유저3",
     "date": "2025-01-03",
-    "content": "내용3"
+    "content": "내용3",
+    "views": 3
   }
 ]

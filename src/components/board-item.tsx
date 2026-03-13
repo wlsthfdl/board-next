@@ -15,11 +15,15 @@ export default function BoardItem({
     >
       <div className="col-span-1 text-center text-gray-500">{total}</div>
 
-      <div className="col-span-8 cursor-pointer hover:underline">
+      <div className="col-span-7 cursor-pointer hover:underline">
         {board.title}
+        <img src="/img2.png" className="ml-2 inline h-4 w-4"></img>
       </div>
 
       <div className="col-span-3 text-center text-gray-500">{board.date}</div>
+      <div className="col-span-1 text-center text-gray-500">
+        {board.views ?? 0}
+      </div>
     </Link>
   );
 }

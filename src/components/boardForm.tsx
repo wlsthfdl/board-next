@@ -1,6 +1,12 @@
 "use client";
 
-import { getBoard, addBoard, editBoard, deleteBoard } from "@/lib/board";
+import {
+  getBoard,
+  addBoard,
+  editBoard,
+  deleteBoard,
+  increaseView,
+} from "@/lib/board";
 import { BoardData } from "@/types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -21,6 +27,7 @@ export default function BoardForm({
     nickname: "",
     userId: "",
     date: new Date().toISOString().slice(0, 10),
+    views: 0,
   });
   const router = useRouter();
 
@@ -36,6 +43,7 @@ export default function BoardForm({
 
         if (data) {
           setForm(data);
+          increaseView(Number(id));
         } else {
           alert("존재하지 않는 게시글입니다.");
           router.push("/board");

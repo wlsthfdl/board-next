@@ -5,4 +5,5 @@ export interface BoardData {
   userId: string;
   date: string;
   content: string;
+  views: number;
 }

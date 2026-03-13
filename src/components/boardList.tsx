@@ -24,7 +24,7 @@ export default function BoardList() {
       const data = await getBoards();
 
       //검색어 포함 항목
-      const filtered = data.filter((board) => board.title.includes(q));
+      const filtered = data.filter((board) => board.title?.includes(q));
       //내림차순 정렬
       const sorted = filtered.sort((a, b) => Number(b.id) - Number(a.id));
       //총 게시글 개수
@@ -44,8 +44,9 @@ export default function BoardList() {
       {/* header */}
       <div className="grid grid-cols-12 border-b bg-blue-50 px-4 py-1 text-sm font-semibold text-gray-600">
         <div className="col-span-1 text-center">번호</div>
-        <div className="col-span-8">제목</div>
+        <div className="col-span-7">제목</div>
         <div className="col-span-3 text-center">작성일</div>
+        <div className="col-span-1 text-center">조회수</div>
       </div>
       {/* list */}
       {boards.length === 0 ? (

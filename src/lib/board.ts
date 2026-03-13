@@ -58,3 +58,14 @@ export async function deleteBoard(id: number) {
 
   localStorage.setItem("board", JSON.stringify(delBoard));
 }
+
+//조회수 증가
+export async function increaseView(id: number) {
+  const boards = await getBoards();
+
+  const updateViewBoard = boards.map((item) =>
+    Number(item.id) === id ? { ...item, views: (item.views ?? 0) + 1 } : item,
+  );
+
+  localStorage.setItem("board", JSON.stringify(updateViewBoard));
+}
