@@ -6,9 +6,9 @@ export default function ListInfo() {
   //totalCount 읽기
   const totalCnt = useBoardStore((state) => state.totalCount);
   const currentPage = useBoardStore((state) => state.currentPage);
-  const pageSize = 2;
+  const pageSize = 8;
   const totalPage = Math.ceil(totalCnt / pageSize);
-
+  if (totalCnt === 0) return null;
   return (
     <div className="mb-4 flex items-center justify-between text-sm text-gray-500">
       <div className="font-medium">

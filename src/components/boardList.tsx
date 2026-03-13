@@ -18,7 +18,7 @@ export default function BoardList() {
   const totalCount = useBoardStore((state) => state.totalCount);
   const currentPage = useBoardStore((state) => state.currentPage);
 
-  const pageSize = 2;
+  const pageSize = 8;
   useEffect(() => {
     async function load() {
       const data = await getBoards();
@@ -36,7 +36,6 @@ export default function BoardList() {
 
       setBoards(sorted.slice(start, end));
     }
-
     load();
   }, [q, currentPage]);
 
@@ -48,17 +47,20 @@ export default function BoardList() {
         <div className="col-span-8">제목</div>
         <div className="col-span-3 text-center">작성일</div>
       </div>
-
       {/* list */}
-      {boards.map((board, index) => {
-        return (
+      {boards.length === 0 ? (
+        <div className="py-3 text-center text-sm text-gray-500">
+          검색결과가 없습니다.
+        </div>
+      ) : (
+        boards.map((board, index) => (
           <BoardItem
             key={board.id}
             board={board}
-            total={totalCount - (currentPage - 1) - index}
+            total={totalCount - (currentPage - 1) * pageSize - index}
           ></BoardItem>
-        );
-      })}
+        ))
+      )}
     </div>
   );
 }

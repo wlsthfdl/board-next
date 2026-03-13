@@ -5,6 +5,7 @@ import { BoardData } from "@/types";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { validation } from "@/app/utils/validation";
+import { useBoardStore } from "@/store/boardStore";
 
 export default function BoardForm({
   id,
@@ -65,6 +66,7 @@ export default function BoardForm({
     }));
   }
 
+  const setCurrentPage = useBoardStore((state) => state.setCurrentPage);
   function handleSubmit() {
     if (!validation(form)) return;
     const msg = `게시글을 ${mode === "write" ? "등록" : "수정"} 하시겠습니까?`;
@@ -78,6 +80,9 @@ export default function BoardForm({
       editBoard(form, Number(id));
       alert("게시글이 수정되었습니다.");
     }
+
+    setCurrentPage(1);
+    router.push("/board");
   }
 
   function handleDelete() {
