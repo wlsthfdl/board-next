@@ -6,4 +6,5 @@ export interface BoardData {
   date: string;
   content: string;
   views: number;
+  fileName?: string;
 }

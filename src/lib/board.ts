@@ -3,14 +3,7 @@ import mockData from "./../mock/board.json";
 
 //목록
 export async function getBoards(): Promise<BoardData[]> {
-  const data = localStorage.getItem("board");
-
-  if (!data) {
-    localStorage.setItem("board", JSON.stringify(mockData));
-    return mockData;
-  }
-
-  return JSON.parse(data);
+  return JSON.parse(localStorage.getItem("board") || "[]");
 }
 
 //데이터 1개

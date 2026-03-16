@@ -23,8 +23,7 @@ export function validation(form: BoardData) {
     return false;
   }
 
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(form.date)) {
-    alert("날짜 형식이 올바르지 않습니다.");
+  if (!validateDate(form.date)) {
     return false;
   }
 
@@ -47,8 +46,24 @@ function validateNickname(nickname: string) {
   return regex.test(nickname);
 }
 
+//ID검사
 function validateUserId(userId: string) {
   const emailRegex = /^\S+@\S+\.\S+$/;
 
   return emailRegex.test(userId);
+}
+
+//날짜 형식
+function validateDate(dateStr: string) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  if (isNaN(date.getTime())) {
+    alert("올바른 날짜 형식이 아닙니다.");
+    return false;
+  }
+  if (date > now) {
+    alert("미래 날짜는 입력할 수 없습니다.");
+    return false;
+  }
+  return true;
 }
